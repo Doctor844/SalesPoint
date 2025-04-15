@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .userDetailsService(userService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/registration", "/error").permitAll()
+                        .requestMatchers("/auth/**", "/registration", "/error", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
