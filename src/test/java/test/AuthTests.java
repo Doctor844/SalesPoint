@@ -1,10 +1,10 @@
 package test;
 
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-@WebMvcTest
-@AutoConfigureMockMvc
+//@WebMvcTest
+//@AutoConfigureMockMvc
 public class AuthTests {
 /*
     @Autowired

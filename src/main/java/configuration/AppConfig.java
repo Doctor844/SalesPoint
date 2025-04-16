@@ -13,14 +13,16 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableWebMvc
+@EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(value = "repository")
 @PropertySource("classpath:application.properties")
-@EnableTransactionManagement
 @ComponentScan(basePackages = {"configuration", "repository", "model", "service"})
 public class AppConfig {
 

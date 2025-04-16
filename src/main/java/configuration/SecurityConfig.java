@@ -1,41 +1,47 @@
 package configuration;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
-import service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .userDetailsService(userService)
+                .userDetailsService(userDetailsService)
+                .csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/registration", "/error", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/auth/**", "/error", "/public/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -43,15 +49,15 @@ public class SecurityConfig {
                         .loginProcessingUrl("/process_login")
                         .defaultSuccessUrl("/cards", true)
                         .failureUrl("/auth/login?error=true")
+                        .permitAll()
                 )
                 .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login?logout=true")
-                .invalidateHttpSession(true)
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/auth/login?logout=true")
+                        .invalidateHttpSession(true)
                         .permitAll()
-        );
+                );
 
         return http.build();
-
     }
 }
