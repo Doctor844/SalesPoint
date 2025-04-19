@@ -1,5 +1,7 @@
 package configuration;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +25,7 @@ import java.util.Properties;
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableJpaRepositories(value = "repository")
 @PropertySource("classpath:application.properties")
-@ComponentScan(basePackages = {"configuration", "repository", "model", "service"})
+@ComponentScan(basePackages = {"configuration", "repository", "model", "service", "security", "controller", "org.springdoc"})
 public class AppConfig {
 
     @Value("${spring.datasource.url}")
@@ -88,4 +90,5 @@ public class AppConfig {
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
+
 }

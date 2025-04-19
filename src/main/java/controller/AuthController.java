@@ -2,12 +2,9 @@ package controller;
 
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import service.UserRegistration;
@@ -27,11 +24,7 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginPage(HttpServletRequest request, Model model) {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
-        if (csrfToken != null) {
-            model.addAttribute("_csrf", csrfToken);
-        }
+    public String loginPage() {
         return "auth/login";
     }
 
@@ -50,5 +43,10 @@ public class AuthController {
             return "/auth/registration";
         }
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "auth/hello";
     }
 }

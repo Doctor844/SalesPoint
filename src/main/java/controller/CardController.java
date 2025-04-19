@@ -88,9 +88,6 @@ public class CardController {
     }
 
 
-    @PostMapping("/hello")
-    public String hello() {
-        return "hello";
-    }
+
 
 }

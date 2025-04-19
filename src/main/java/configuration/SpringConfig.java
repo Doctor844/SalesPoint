@@ -4,9 +4,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -17,6 +16,7 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+
 
     public SpringConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -49,5 +49,27 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setCharacterEncoding("UTF-8");
         resolver.setOrder(1);
         registry.viewResolver(resolver);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/resources/");
+        registry.addResourceHandler("/swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/swagger-ui/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/4.15.5/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/v3/api-docs/**")
+                .addResourceLocations("classpath:/META-INF/resources/");
+    }
+
+    @Bean
+    public InternalResourceViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/classpath:/META-INF/resources/");
+        resolver.setSuffix(".jsp");
+        return resolver;
     }
 }
