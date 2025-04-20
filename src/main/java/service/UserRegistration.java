@@ -23,7 +23,7 @@ public class UserRegistration {
     @Transactional
     public void register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(UserRoleEnum.USER.toString());
+        user.setRole(UserRoleEnum.USER.name());
         userRepository.save(user);
     }
 }

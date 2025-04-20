@@ -1,0 +1,609 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "user_access"
+      changes:
+        - createTable:
+            tableName: "user_access"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "user_login"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: "user_password"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "full_name"
+                  type: "VARCHAR(255)"
+              - column:
+                  name: "user_role"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: "2"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "payment_system"
+      changes:
+        - createTable:
+            tableName: "payment_system"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "payment_system_name"
+                  type: "VARCHAR(50)"
+
+  - changeSet:
+      id: "3"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "card"
+      changes:
+        - createTable:
+            tableName: "card"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "card_number"
+                  type: "VARCHAR(50)"
+              - column:
+                  name: "expiration_date"
+                  type: "DATE"
+              - column:
+                  name: "holder_name"
+                  type: "VARCHAR(50)"
+              - column:
+                  name: "payment_system_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_payment_system"
+                    referencedTableName: "payment_system"
+                    referencedColumnNames: "id"
+
+  - changeSet:
+      id: "4"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "transaction_type"
+      changes:
+        - createTable:
+            tableName: "transaction_type"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "transaction_type_name"
+                  type: "VARCHAR(255)"
+              - column:
+                  name: "operator"
+                  type: "VARCHAR(1)"
+
+  - changeSet:
+      id: "5"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "response_code"
+      changes:
+        - createTable:
+            tableName: "response_code"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "error_code"
+                  type: "VARCHAR(2)"
+              - column:
+                  name: "error_description"
+                  type: "VARCHAR(255)"
+              - column:
+                  name: "error_level"
+                  type: "VARCHAR(255)"
+
+  - changeSet:
+      id: "6"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "merchant_category_code"
+      changes:
+        - createTable:
+            tableName: "merchant_category_code"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "mcc"
+                  type: "VARCHAR(4)"
+              - column:
+                  name: "mcc_name"
+                  type: "VARCHAR(255)"
+
+  - changeSet:
+      id: "7"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "acquiring_bank"
+      changes:
+        - createTable:
+            tableName: "acquiring_bank"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "bic"
+                  type: "VARCHAR(9)"
+              - column:
+                  name: "abbreviated_name"
+                  type: "VARCHAR(255)"
+
+  - changeSet:
+      id: "8"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "sales_point"
+      changes:
+        - createTable:
+            tableName: "sales_point"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "pos_name"
+                  type: "VARCHAR(255)"
+              - column:
+                  name: "pos_address"
+                  type: "VARCHAR(255)"
+              - column:
+                  name: "pos_inn"
+                  type: "VARCHAR(12)"
+              - column:
+                  name: "acquiring_bank_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_salespoint_acqbank"
+                    referencedTableName: "acquiring_bank"
+                    referencedColumnNames: "id"
+
+
+  - changeSet:
+      id: "9"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "terminal"
+      changes:
+        - createTable:
+            tableName: "terminal"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "terminal_id"
+                  type: "VARCHAR(9)"
+              - column:
+                  name: "mcc_id"
+                  type: "INTEGER"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_terminal_mcc"
+                    referencedTableName: "merchant_category_code"
+                    referencedColumnNames: "id"
+              - column:
+                  name: "pos_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_terminal_sales_point"
+                    referencedTableName: "sales_point"
+                    referencedColumnNames: "id"
+
+  - changeSet:
+      id: "10"
+      author: "admin"
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          tableExists:
+            tableName: "transaction"
+      changes:
+        - createTable:
+            tableName: "transaction"
+            columns:
+              - column:
+                  name: "id"
+                  type: "BIGINT"
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "transaction_date"
+                  type: "DATE"
+              - column:
+                  name: "sum"
+                  type: "DECIMAL"
+              - column:
+                  name: "transaction_type_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_transaction_type"
+                    referencedTableName: "transaction_type"
+                    referencedColumnNames: "id"
+              - column:
+                  name: "card_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_transaction_card"
+                    referencedTableName: "card"
+                    referencedColumnNames: "id"
+              - column:
+                  name: "terminal_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_transaction_terminal"
+                    referencedTableName: "terminal"
+                    referencedColumnNames: "id"
+              - column:
+                  name: "response_code_id"
+                  type: "BIGINT"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_transaction_response_code"
+                    referencedTableName: "response_code"
+                    referencedColumnNames: "id"
+              - column:
+                  name: "authorization_code"
+                  type: "VARCHAR(6)"
+
+
+ # заполнение данными
+  - changeSet:
+      id: "11"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "user_access"
+            columns:
+              - column: { name: "user_login", value: "administrator" }
+              - column: { name: "user_password", value: "" }
+              - column: { name: "full_name", value: "Administrators full name" }
+              - column: { name: "user_role", value: "ADMIN" }
+        - insert:
+            tableName: "user_access"
+            columns:
+              - column: { name: "user_login", value: "manager" }
+              - column: { name: "user_password", value: "" }
+              - column: { name: "full_name", value: "Managers full name" }
+              - column: { name: "user_role", value: "USER" }
+
+  - changeSet:
+      id: "12"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "payment_system"
+            columns:
+              - column: { name: "payment_system_name", value: "VISA International Service Association" }
+        - insert:
+            tableName: "payment_system"
+            columns:
+              - column: { name: "payment_system_name", value: "Mastercard" }
+        - insert:
+            tableName: "payment_system"
+            columns:
+              - column: { name: "payment_system_name", value: "JCB" }
+        - insert:
+            tableName: "payment_system"
+            columns:
+              - column: { name: "payment_system_name", value: "American Express" }
+        - insert:
+            tableName: "payment_system"
+            columns:
+              - column: { name: "payment_system_name", value: "Diners Club International" }
+        - insert:
+            tableName: "payment_system"
+            columns:
+              - column: { name: "payment_system_name", value: "China UnionPay" }
+
+  - changeSet:
+      id: "13"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "acquiring_bank"
+            columns:
+              - column: { name: "bic", value: "041234567" }
+              - column: { name: "abbreviated_name", value: "ПАО Банк-эквайер №1" }
+        - insert:
+            tableName: "acquiring_bank"
+            columns:
+              - column: { name: "bic", value: "041234568" }
+              - column: { name: "abbreviated_name", value: "ПАО Банк-эквайер №2" }
+        - insert:
+            tableName: "acquiring_bank"
+            columns:
+              - column: { name: "bic", value: "041234569" }
+              - column: { name: "abbreviated_name", value: "ПАО Банк-эквайер №3" }
+
+  - changeSet:
+      id: "14"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "sales_point"
+            columns:
+              - column: { name: "pos_name", value: "Shop №1" }
+              - column: { name: "pos_address", value: "City, 1-st 1" }
+              - column: { name: "pos_inn", value: "1234567890" }
+              - column: { name: "acquiring_bank_id", valueNumeric: 1 }
+        - insert:
+            tableName: "sales_point"
+            columns:
+              - column: { name: "pos_name", value: "Shop №2" }
+              - column: { name: "pos_address", value: "City, 2-st 2" }
+              - column: { name: "pos_inn", value: "1234567891" }
+              - column: { name: "acquiring_bank_id", valueNumeric: 2 }
+        - insert:
+            tableName: "sales_point"
+            columns:
+              - column: { name: "pos_name", value: "Shop №3" }
+              - column: { name: "pos_address", value: "City, 3-st 3" }
+              - column: { name: "pos_inn", value: "1234567892" }
+              - column: { name: "acquiring_bank_id", valueNumeric: 1 }
+
+  - changeSet:
+      id: "15"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "merchant_category_code"
+            columns:
+              - column: { name: "mcc", value: "5309" }
+              - column: { name: "mcc_name", value: "Беспошлинные магазины Duty Free" }
+        - insert:
+            tableName: "merchant_category_code"
+            columns:
+              - column: { name: "mcc", value: "5651" }
+              - column: { name: "mcc_name", value: "Одежда для всей семьи" }
+        - insert:
+            tableName: "merchant_category_code"
+            columns:
+              - column: { name: "mcc", value: "5691" }
+              - column: { name: "mcc_name", value: "Магазины мужской и женской одежды" }
+        - insert:
+            tableName: "merchant_category_code"
+            columns:
+              - column: { name: "mcc", value: "5812" }
+              - column: { name: "mcc_name", value: "Места общественного питания, рестораны" }
+        - insert:
+            tableName: "merchant_category_code"
+            columns:
+              - column: { name: "mcc", value: "5814" }
+              - column: { name: "mcc_name", value: "Фастфуд" }
+
+  - changeSet:
+      id: "16"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "terminal"
+            columns:
+              - column: { name: "terminal_id", value: "000000001" }
+              - column: { name: "mcc_id", valueNumeric: 1 }
+              - column: { name: "pos_id", valueNumeric: 1 }
+        - insert:
+            tableName: "terminal"
+            columns:
+              - column: { name: "terminal_id", value: "000000002" }
+              - column: { name: "mcc_id", valueNumeric: 2 }
+              - column: { name: "pos_id", valueNumeric: 2 }
+        - insert:
+            tableName: "terminal"
+            columns:
+              - column: { name: "terminal_id", value: "000000003" }
+              - column: { name: "mcc_id", valueNumeric: 3 }
+              - column: { name: "pos_id", valueNumeric: 3 }
+
+  - changeSet:
+      id: "17"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "transaction_type"
+            columns:
+              - column: { name: "transaction_type_name", value: "Списание со счета" }
+              - column: { name: "operator", value: "-" }
+        - insert:
+            tableName: "transaction_type"
+            columns:
+              - column: { name: "transaction_type_name", value: "Пополнение счета" }
+              - column: { name: "operator", value: "+" }
+
+  - changeSet:
+      id: "18"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "card"
+            columns:
+              - column: { name: "card_number", value: "4123450000000019" }
+              - column: { name: "expiration_date", valueDate: "2025-12-31" }
+              - column: { name: "holder_name", value: "IVAN I.IVANOV" }
+              - column: { name: "payment_system_id", valueNumeric: 1 }
+        - insert:
+            tableName: "card"
+            columns:
+              - column: { name: "card_number", value: "5123450000000024" }
+              - column: { name: "expiration_date", valueDate: "2025-12-31" }
+              - column: { name: "holder_name", value: "SEMION E.PETROV" }
+              - column: { name: "payment_system_id", valueNumeric: 2 }
+
+  - changeSet:
+      id: "19"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "00" }
+              - column: { name: "error_description", value: "одобрено и завершено" }
+              - column: { name: "error_level", value: "Все в порядке" }
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "01" }
+              - column: { name: "error_description", value: "авторизация отклонена, обратиться в банк-эмитент" }
+              - column: { name: "error_level", value: "не критическая" }
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "03" }
+              - column: { name: "error_description", value: "незарегистрированная торговая точка или агрегатор платежей" }
+              - column: { name: "error_level", value: "не критическая" }
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "05" }
+              - column: { name: "error_description", value: "авторизация отклонена, оплату не проводить" }
+              - column: { name: "error_level", value: "критическая" }
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "41" }
+              - column: { name: "error_description", value: "карта утеряна, изъять" }
+              - column: { name: "error_level", value: "критическая" }
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "51" }
+              - column: { name: "error_description", value: "недостаточно средств на счёте" }
+              - column: { name: "error_level", value: "сервисная или аппаратная ошибка" }
+        - insert:
+            tableName: "response_code"
+            columns:
+              - column: { name: "error_code", value: "55" }
+              - column: { name: "error_description", value: "неправильный PIN" }
+              - column: { name: "error_level", value: "не критическая" }
+
+  - changeSet:
+      id: "20"
+      author: "admin"
+      changes:
+        - insert:
+            tableName: "transaction"
+            columns:
+              - column: { name: "transaction_date", valueDate: "2022-10-22" }
+              - column: { name: "sum", valueNumeric: 10.11 }
+              - column: { name: "transaction_type_id", valueNumeric: 1 }
+              - column: { name: "card_id", valueNumeric: 1 }
+              - column: { name: "terminal_id", valueNumeric: 1 }
+              - column: { name: "response_code_id", valueNumeric: 1 }
+              - column: { name: "authorization_code", value: "342190" }
+        - insert:
+            tableName: "transaction"
+            columns:
+              - column: { name: "transaction_date", valueDate: "2022-04-06" }
+              - column: { name: "sum", valueNumeric: 50.92 }
+              - column: { name: "transaction_type_id", valueNumeric: 1 }
+              - column: { name: "card_id", valueNumeric: 2 }
+              - column: { name: "terminal_id", valueNumeric: 1 }
+              - column: { name: "response_code_id", valueNumeric: 1 }
+              - column: { name: "authorization_code", value: "427471" }

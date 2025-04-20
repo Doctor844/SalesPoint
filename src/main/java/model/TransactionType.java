@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Table(name = "transaction_type")
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Schema(description = "Тип транзакции")
-public class TransactionType {
+public class TransactionType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

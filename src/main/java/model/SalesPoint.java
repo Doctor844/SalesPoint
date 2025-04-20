@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Table(name = "sales_point")
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Schema(description = "Торговая точка")
-public class SalesPoint {
+public class SalesPoint implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

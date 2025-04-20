@@ -58,7 +58,7 @@ public class CardController {
     @Operation(summary = "Удалить карточку по ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable("id") Long id) {
-        if (cardService.findById(id).isPresent()) {
+        if (null!=cardService.findById(id)) {
             cardService.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {

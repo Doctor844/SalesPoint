@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Table(name = "payment_system")
 @NoArgsConstructor
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Schema(description = "Платёжная система")
-public class PaymentSystem {
+public class PaymentSystem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

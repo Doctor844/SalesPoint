@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Data
 @Table(name = "acquiring_bank")
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Schema(description = "Принимающий банк")
-public class AcquiringBank {
+public class AcquiringBank implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

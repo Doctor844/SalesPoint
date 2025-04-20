@@ -5,20 +5,34 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import util.UserRoleEnum;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private static final String[] AUTH_WHITELIST = {
+
+    private static final String[] ADMIN_AUTH_WHITELIST = {
+            "/cards/table/**",
+            "/acquiring-banks/table/**",
+            "/merchant-category-codes/table/**",
+            "/payment-systems/table/**",
+            "/response-codes/table/**",
+            "/sales-points/table/**",
+            "/terminals/table/**",
+            "/transactions/table/**",
+            "/transaction-types/table/**",
+            "/users/**",
+    };
+    private static final String[] NO_AUTH_WHITELIST = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/webjars/**",
             "/auth/**",
             "/error/**",
             "/swagger-ui.html"
@@ -59,12 +73,12 @@ public class SecurityConfig {
                                                    DaoAuthenticationProvider authProvider) throws Exception {
         http
                 .authenticationProvider(authProvider)
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("auth/login") // Ожидаем CSRF токен на всех запросах (можно настроить для определенных путей)
+                .csrf(Customizer.withDefaults()
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(NO_AUTH_WHITELIST).permitAll()
+                        .requestMatchers(ADMIN_AUTH_WHITELIST).hasRole(UserRoleEnum.ADMIN.name())
+                        .anyRequest().hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")

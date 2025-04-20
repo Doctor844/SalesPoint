@@ -2,6 +2,8 @@ package service;
 
 import model.Card;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,36 +25,40 @@ public class CardService {
     }
 
     @Transactional
+    @CacheEvict(value = "cards", allEntries = true) // очищаем кэш при сохранении
     public Card save(Card card) {
         return cardRepository.save(card);
     }
 
-
+    @Cacheable(value = "cards", key = "#root.args[0]", unless = "#root.args[0] == null") // кэшируем по id
     public Optional<Card> findById(Long id) {
+        System.out.println(" Данные из БД, id = " + id);
         return cardRepository.findById(id);
     }
 
     @Transactional
+    @CacheEvict(value = "cards", key = "#id") // очищаем кэш при удалении
     public void deleteById(Long id) {
         cardRepository.deleteById(id);
     }
 
-
+    @Cacheable(value = "cardsAll") // кэшируем весь список (осторожно с обновлением)
     public List<Card> findAll() {
+        System.out.println("Получаем список из БД");
         return cardRepository.findAll();
     }
 
     @Transactional
+    @CacheEvict(value = { "cards", "cardsAll" }, allEntries = true)
     public void truncateTable() {
-        String sql = """
-                TRUNCATE TABLE card CASCADE""";
+        String sql = "TRUNCATE TABLE card CASCADE";
         jdbcTemplate.execute(sql);
     }
 
     @Transactional
+    @CacheEvict(value = { "cards", "cardsAll" }, allEntries = true)
     public void dropTable() {
-        String sql = """
-                DROP TABLE IF EXISTS card CASCADE""";
+        String sql = "DROP TABLE IF EXISTS card CASCADE";
         jdbcTemplate.execute(sql);
     }
 
@@ -70,5 +76,4 @@ public class CardService {
                 """;
         jdbcTemplate.execute(sql);
     }
-
 }
