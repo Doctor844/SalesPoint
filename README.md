@@ -27,10 +27,13 @@ http://localhost:8082
 ### Stop the app with Docker
 
 ```bash
-
 docker compose down
 ```
 
 ```bash
-docker pull eclipse-temurin:17-jdk-alpine
+docker pull openjdk:17
+```
+
+```bash
+docker logs sales_point_app
 ```

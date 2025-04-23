@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:15
@@ -7,7 +9,7 @@ services:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: sales_point
     ports:
-      - "5432:5432"
+      - "5432:5431"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -15,12 +17,13 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
   redis:
     image: redis:latest
     container_name: redis_cache
     ports:
-      - "6379:6379"
+      - "6379:6378"
 
   pgadmin:
     image: dpage/pgadmin4
@@ -29,24 +32,23 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8080:80"
+      - "8079:80"
 
   sales-point:
     build: .
     container_name: sales_point_app
     ports:
-      - "8081:8081"
+      - "8081:8082"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales_point  # исправлено
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sales_point
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1234
       SPRING_REDIS_HOST: redis
-    restart: on-failure  # добавить автоматический перезапуск при ошибках
 
 volumes:
   postgres_data:
