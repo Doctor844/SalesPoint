@@ -41,7 +41,7 @@ public class RedisConfig {
         return builder.build();
     }
 
-    // (опционально) Кастомный генератор ключей
+
     @Bean
     public KeyGenerator simpleKeyGenerator() {
         return (target, method, params) -> {

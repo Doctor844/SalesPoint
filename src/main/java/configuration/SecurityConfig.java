@@ -5,14 +5,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import service.UserService;
 import util.UserRoleEnum;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -28,20 +31,21 @@ public class SecurityConfig {
             "/terminals/table/**",
             "/transactions/table/**",
             "/transaction-types/table/**",
-            "/users/**",
+            "/users/**"
     };
     private static final String[] NO_AUTH_WHITELIST = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/auth/**",
             "/error/**",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/login"
     };
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
     @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
     }
 
 
@@ -54,7 +58,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -73,26 +77,13 @@ public class SecurityConfig {
                                                    DaoAuthenticationProvider authProvider) throws Exception {
         http
                 .authenticationProvider(authProvider)
-                .csrf(Customizer.withDefaults()
-                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(NO_AUTH_WHITELIST).permitAll()
                         .requestMatchers(ADMIN_AUTH_WHITELIST).hasRole(UserRoleEnum.ADMIN.name())
                         .anyRequest().hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
                 )
-                .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/cards", true)
-                        .failureUrl("/auth/login?error=true")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/auth/login?logout=true")
-                        .invalidateHttpSession(true)
-                        .permitAll()
-                );
+                .formLogin(withDefaults());
 
         return http.build();
     }

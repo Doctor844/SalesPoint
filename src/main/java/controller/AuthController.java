@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import service.UserRegistration;
 import util.UserValidator;
 
-@Controller
-@RequestMapping("/auth")
+//@Controller
+//@RequestMapping("/auth")
 public class AuthController {
-
+/*
     private final UserValidator userValidator;
     private final UserRegistration userRegistration;
 
@@ -34,7 +34,7 @@ public class AuthController {
         return "auth/registration";
     }
 
-    @RequestMapping(value ="/registration", method = RequestMethod.POST)
+    @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
         userRegistration.register(user);
@@ -48,5 +48,5 @@ public class AuthController {
     @GetMapping("/hello")
     public String hello() {
         return "auth/hello";
-    }
+    }*/
 }

@@ -32,7 +32,7 @@ public class CardController {
     }
 
     @Operation(summary = "Получить карточку по ID")
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable("id") Long id) {
         Optional<Card> card = cardService.findById(id);
         return card.map(ResponseEntity::ok)
@@ -47,7 +47,7 @@ public class CardController {
     }
 
     @Operation(summary = "Обновить карточку по ID")
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Card> updateCard(@PathVariable("id") Long id, @RequestBody Card card) {
         card.setId(id);
         Optional<Card> updatedCard = Optional.ofNullable(cardService.save(card));
@@ -56,9 +56,10 @@ public class CardController {
     }
 
     @Operation(summary = "Удалить карточку по ID")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable("id") Long id) {
-        if (null!=cardService.findById(id)) {
+        Optional<Card> card = cardService.findById(id);
+        if (card.isPresent()) {
             cardService.deleteById(id);
             return ResponseEntity.noContent().build();
         } else {

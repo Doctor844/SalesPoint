@@ -25,14 +25,13 @@ public class CardService {
     }
 
     @Transactional
-    @CacheEvict(value = "cards", allEntries = true) // очищаем кэш при сохранении
+    @CacheEvict(value = "cards", allEntries = true)
     public Card save(Card card) {
         return cardRepository.save(card);
     }
 
-    @Cacheable(value = "cards", key = "#root.args[0]", unless = "#root.args[0] == null") // кэшируем по id
+    @Cacheable(value = "cards", key = "#root.args[0]", unless = "#root.args[0] == null")
     public Optional<Card> findById(Long id) {
-        System.out.println(" Данные из БД, id = " + id);
         return cardRepository.findById(id);
     }
 
