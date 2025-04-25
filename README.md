@@ -35,5 +35,5 @@ docker pull openjdk:17
 ```
 
 ```bash
-docker logs sales_point_app
+docker-compose up --build -d
 ```

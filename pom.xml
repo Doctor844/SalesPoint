@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.example</groupId>
     <artifactId>SalesPoint</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>SalesPoint Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -171,25 +171,23 @@
             <version>5.13.0-M1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.7.1</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
 
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>configuration.Application</mainClass> <!-- Укажите ваш главный класс -->
-                        </manifest>
-                    </archive>
-                </configuration>
-
             </plugin>
+
+
 
         </plugins>
         <finalName>SalesPoint</finalName>

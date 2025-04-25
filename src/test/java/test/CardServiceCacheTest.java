@@ -2,7 +2,6 @@ package test;
 
 
 import configuration.RedisConfig;
-import model.Card;
 import org.junit.jupiter.api.*;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
@@ -11,10 +10,6 @@ import redis.embedded.RedisServer;
 import repository.CardRepository;
 import service.CardService;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CardServiceCacheTest {

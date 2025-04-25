@@ -362,15 +362,15 @@ databaseChangeLog:
         - insert:
             tableName: "user_access"
             columns:
-              - column: { name: "user_login", value: "administrator" }
-              - column: { name: "user_password", value: "" }
+              - column: { name: "user_login", value: "admin" }
+              - column: { name: "user_password", value: "$2a$10$7HDPV.Z6j0dAN8nxGCNZKumidPyAyQxSSf5X1G4NfNFBTxmwrmLKi" }
               - column: { name: "full_name", value: "Administrators full name" }
               - column: { name: "user_role", value: "ADMIN" }
         - insert:
             tableName: "user_access"
             columns:
               - column: { name: "user_login", value: "manager" }
-              - column: { name: "user_password", value: "" }
+              - column: { name: "user_password", value: "$2a$10$7HDPV.Z6j0dAN8nxGCNZKumidPyAyQxSSf5X1G4NfNFBTxmwrmLKi" }
               - column: { name: "full_name", value: "Managers full name" }
               - column: { name: "user_role", value: "USER" }
 
